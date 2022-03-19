@@ -1,0 +1,19 @@
+{
+  "name": "fernandinha",
+  "version": "1.0.0",
+  "description": "Fernandinha é um bot para auxiliar minha namorada no seu trabalho como monitora",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaquetdiniz/fernandinha.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isaquetdiniz/fernandinha/issues"
+  },
+  "homepage": "https://github.com/isaquetdiniz/fernandinha#readme"
+}
