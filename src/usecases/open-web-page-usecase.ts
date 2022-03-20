@@ -7,6 +7,7 @@ export class OpenWebPageUsecase {
   ) {}
 
   async execute() {
-    await this.browser.openPage(this.link);
+    const page = await this.browser.openPage(this.link);
+    return page;
   }
 }

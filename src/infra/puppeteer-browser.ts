@@ -1,30 +1,44 @@
 import puppeteer from "puppeteer";
+
+import { IPage } from "../interfaces/page";
 import { IBrowser } from "../interfaces/browser";
+import { PuppeteerPage } from "./puppeteer-page";
 
 export class PuppeteerBrowser implements IBrowser {
   browser?: puppeteer.Browser;
 
-  constructor() {
-    this.launchBrowser();
-  }
+  constructor() {}
 
-  async launchBrowser(): Promise<void> {
+  async launchBrowser(): Promise<puppeteer.Browser> {
     if (!this.browser) {
-      this.browser = await puppeteer.launch({
+      const browser = await puppeteer.launch({
         headless: false,
-        ignoreDefaultArgs: ["--disable-extensions"],
-        args: [
-          "--no-sandbox",
-          "--disable-setuid-sandbox",
-          "--disable-dev-shm-usage",
-        ],
       });
+
+      return browser;
     }
+
+    return this.browser;
   }
 
-  async openPage(link: string): Promise<void> {
-    const page = await this.browser?.newPage();
+  async openPage(link: string): Promise<IPage> {
+    this.browser = await this.launchBrowser();
 
-    await page?.goto(link);
+    const context = this.browser.defaultBrowserContext();
+
+    await context.overridePermissions(
+      "https://online.academiafernandinhobeltrao.com.br",
+      ["geolocation"]
+    );
+
+    const page = await this.browser.newPage();
+
+    await page.goto(link);
+
+    await page.setGeolocation({ latitude: -8.0085708, longitude: -34.9691491 });
+
+    const newPage = new PuppeteerPage(page);
+
+    return newPage;
   }
 }

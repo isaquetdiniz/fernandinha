@@ -1,3 +1,5 @@
+import { IPage } from "./page";
+
 export interface IBrowser {
-  openPage(link: string): Promise<void>;
+  openPage(link: string): Promise<IPage>;
 }
