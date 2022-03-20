@@ -1,7 +1,8 @@
-import { PuppeteerBrowser } from "./infra/puppeteer-browser";
 import { OpenWebPageUsecase } from "./usecases/open-web-page-usecase";
 import { SelectQuestionInPageUsecase } from "./usecases/select-question-in-page-usecase";
 import { LoginInWebPageUsecase } from "./usecases/login-in-web-page-usecase";
+import { PuppeteerBrowser } from "./infra/puppeteer-browser";
+import { PlaySoundSpeaker } from "./infra/play-sound-speaker";
 
 import { environment } from "./config";
 
@@ -17,6 +18,7 @@ const {
 
 async function main() {
   const browser = new PuppeteerBrowser();
+  const speaker = new PlaySoundSpeaker();
 
   const page = await new OpenWebPageUsecase(link, browser).execute();
 
@@ -32,7 +34,7 @@ async function main() {
 
   await page.click(questionsPageLink);
 
-  await new SelectQuestionInPageUsecase(page).execute();
+  await new SelectQuestionInPageUsecase(page, speaker).execute();
 }
 
 main();

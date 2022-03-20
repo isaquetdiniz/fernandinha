@@ -23,29 +23,54 @@ export class PuppeteerPage implements IPage {
     this.page.reload();
   }
 
-  async searchAll(field: string): Promise<any[]> {
+  async searchQuestions(field: string): Promise<Question[]> {
     try {
-      console.log(field);
-      const questions = await this.page.$$eval(field, (trs) =>
-        trs.map((tr) => {
-          console.log(tr);
-          const children = [...tr.children];
+      await this.awaitForSelector("tbody");
 
-          console.log(children);
+      const tableExists = await this.page.$("tbody");
 
-          const childrenContents = children.map((td) => td.innerHTML);
+      if (!tableExists) {
+        return [];
+      }
 
-          console.log(childrenContents);
+      const tableHasLines = await tableExists.evaluate(
+        (table) => table.children
+      );
 
-          const author = childrenContents[3];
+      if (!Object.keys(tableHasLines).length) {
+        console.log("Questões não foram achadas");
+        return [];
+      }
 
-          const subject = childrenContents[4];
+      console.log("Questões foram achadas");
 
-          const field = childrenContents[10];
+      const tableLines = await this.page.$$(field);
 
-          const newQuestion = new Question(author, subject, field);
+      const questions = await Promise.all(
+        [...tableLines].map(async (tr) => {
+          const textOfTr = await tr.evaluate((tr) => tr.innerHTML);
 
-          console.log(newQuestion);
+          const textWithoutTdStart = textOfTr.replace(/<td>/gim, "");
+          const textWithoutTdEnd = textWithoutTdStart.replace(/<\/td>/gim, "");
+
+          const listOfTexts = textWithoutTdEnd.split("\n");
+
+          console.log(listOfTexts);
+
+          const code = listOfTexts[1];
+
+          const author = listOfTexts[4];
+
+          const subject = listOfTexts[5];
+
+          const textOfLink = listOfTexts[14];
+
+          const partialLink = textOfLink.match(/".+td=N"/)
+            ? //@ts-ignore
+              textOfLink.match(/".+td=N"/)[0].replace(/"/gim, "")
+            : "Não encontrei";
+
+          const newQuestion = new Question(code, author, subject, partialLink);
 
           return newQuestion;
         })
@@ -56,5 +81,9 @@ export class PuppeteerPage implements IPage {
       console.log(err);
       return [];
     }
+  }
+
+  async goto(link: string): Promise<void> {
+    await this.page.goto(link);
   }
 }
