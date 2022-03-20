@@ -32,8 +32,6 @@ async function main() {
 
   await page.click(questionsPageLink);
 
-  page.awaitForSelector("tbody > tr");
-
   await new SelectQuestionInPageUsecase(page).execute();
 }
 

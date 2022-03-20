@@ -24,24 +24,37 @@ export class PuppeteerPage implements IPage {
   }
 
   async searchAll(field: string): Promise<any[]> {
-    const questions = await this.page.$$eval(field, (trs) =>
-      trs.map((tr) => {
-        const children = [...tr.children];
+    try {
+      console.log(field);
+      const questions = await this.page.$$eval(field, (trs) =>
+        trs.map((tr) => {
+          console.log(tr);
+          const children = [...tr.children];
 
-        const childrenContents = children.map((td) => td.innerHTML);
+          console.log(children);
 
-        const author = childrenContents[3];
+          const childrenContents = children.map((td) => td.innerHTML);
 
-        const subject = childrenContents[4];
+          console.log(childrenContents);
 
-        const field = childrenContents[10];
+          const author = childrenContents[3];
 
-        const newQuestion = new Question(author, subject, field);
+          const subject = childrenContents[4];
 
-        return newQuestion;
-      })
-    );
+          const field = childrenContents[10];
 
-    return questions;
+          const newQuestion = new Question(author, subject, field);
+
+          console.log(newQuestion);
+
+          return newQuestion;
+        })
+      );
+
+      return questions;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
   }
 }
