@@ -1,16 +1,19 @@
-import { LoginInWebPageUsecase } from "./usecases/login-in-web-page-usecase";
 import { PuppeteerBrowser } from "./infra/puppeteer-browser";
 import { OpenWebPageUsecase } from "./usecases/open-web-page-usecase";
+import { SelectQuestionInPageUsecase } from "./usecases/select-question-in-page-usecase";
+import { LoginInWebPageUsecase } from "./usecases/login-in-web-page-usecase";
 
-const link =
-  "https://online.academiafernandinhobeltrao.com.br/online/portal2021/administrativo/";
+import { environment } from "./config";
 
-const username = "274";
-const password = "159753";
-
-const usernameField = "#usuario";
-const passwordField = "#senha";
-const buttonToLogin = "button[type=submit]";
+const {
+  link,
+  username,
+  password,
+  usernameField,
+  passwordField,
+  buttonToLogin,
+  questionsPageLink,
+} = environment;
 
 async function main() {
   const browser = new PuppeteerBrowser();
@@ -24,6 +27,14 @@ async function main() {
     passwordField,
     buttonToLogin
   );
+
+  page.awaitForSelector(questionsPageLink);
+
+  await page.click(questionsPageLink);
+
+  page.awaitForSelector("tbody > tr");
+
+  await new SelectQuestionInPageUsecase(page).execute();
 }
 
 main();
