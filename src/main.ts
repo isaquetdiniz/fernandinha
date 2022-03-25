@@ -13,10 +13,12 @@ const {
   usernameField,
   passwordField,
   buttonToLogin,
-  questionsPageLink,
+  questionsPageField,
 } = environment;
 
 async function main() {
+  console.log("[ENV]", environment);
+
   const browser = new PuppeteerBrowser();
   const speaker = new PlaySoundSpeaker();
 
@@ -30,9 +32,9 @@ async function main() {
     buttonToLogin
   );
 
-  page.awaitForSelector(questionsPageLink);
+  page.awaitForSelector(questionsPageField);
 
-  await page.click(questionsPageLink);
+  await page.click(questionsPageField);
 
   await new SelectQuestionInPageUsecase(page, speaker).execute();
 }

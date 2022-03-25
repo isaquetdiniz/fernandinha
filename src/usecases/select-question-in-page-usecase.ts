@@ -29,7 +29,7 @@ export class SelectQuestionInPageUsecase {
 
     console.log("Questão selecionada", selectedQuestion);
 
-    await this.page.click("a.btn.btn-primary");
+    await this.page.goto(selectedQuestion?.link as string);
 
     this.speaker.play();
 

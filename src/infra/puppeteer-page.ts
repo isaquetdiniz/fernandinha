@@ -65,9 +65,12 @@ export class PuppeteerPage implements IPage {
 
           const textOfLink = listOfTexts[14];
 
-          const partialLink = textOfLink.match(/".+td=N"/)
+          const partialLink = textOfLink.match(/".+td=."/)
             ? //@ts-ignore
-              textOfLink.match(/".+td=N"/)[0].replace(/"/gim, "")
+              textOfLink
+                .match(/".+td=."/)[0]
+                .replace(/"/gim, "")
+                .replace(/amp;/gim, "")
             : "Não encontrei";
 
           const newQuestion = new Question(code, author, subject, partialLink);

@@ -1,6 +1,6 @@
 import { environment } from "../config";
 
-const { link } = environment;
+const { questionPageLink } = environment;
 export class Question {
   code: string;
   author: string;
@@ -16,6 +16,6 @@ export class Question {
     this.code = code;
     this.author = author;
     this.subject = subject || undefined;
-    this.link = `${link}${partialLink}`;
+    this.link = `${questionPageLink}${partialLink}`;
   }
 }
