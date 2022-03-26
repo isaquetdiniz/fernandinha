@@ -63,7 +63,7 @@ export class PuppeteerPage implements IPage {
 
           const subject = listOfTexts[5];
 
-          const textOfLink = listOfTexts[14];
+          const textOfLink = listOfTexts[14] || listOfTexts[15] || listOfTexts[16];
 
           const partialLink = textOfLink.match(/".+td=."/)
             ? //@ts-ignore
