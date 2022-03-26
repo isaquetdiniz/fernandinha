@@ -10,21 +10,21 @@ export class SelectQuestionInPageUsecase {
     private readonly speaker: ISpeaker
   ) {}
 
-  async execute() {
+  async execute(): Promise<any> {
     await this.page.reload();
 
     const questions = await this.page.searchQuestions("tbody > tr");
 
     if (!questions.length) {
       await sleep(500);
-      await this.execute();
+      return await this.execute();
     }
 
     const selectedQuestion = SelectQuestionUsecase.execute(questions);
 
     if (!selectedQuestion) {
       await sleep(500);
-      await this.execute();
+      return await this.execute();
     }
 
     console.log("Questão selecionada", selectedQuestion);
