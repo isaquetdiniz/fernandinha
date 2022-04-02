@@ -4,9 +4,9 @@ export class SelectQuestionUsecase {
   static execute(questions: Array<Question>): Question | null {
     const filteredQuestions = questions.filter(
       (question) =>
-        question.author !== "FERNANDO BELTRÃO" &&
-        question.author !== "FERNANDO BELTRAO" &&
-        question.author !== "Acesso Do Monitor"
+        question.author.trim() !== "FERNANDO BELTRÃO" &&
+        question.author.trim() !== "FERNANDO BELTRAO" &&
+        question.author.trim() !== "Acesso Do Monitor"
     );
 
     if (!filteredQuestions.length) {
