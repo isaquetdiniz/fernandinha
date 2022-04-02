@@ -5,6 +5,7 @@ export class SelectQuestionUsecase {
     const filteredQuestions = questions.filter(
       (question) =>
         question.author !== "FERNANDO BELTRÃO" &&
+        question.author !== "FERNANDO BELTRAO" &&
         question.author !== "Acesso Do Monitor"
     );
 
